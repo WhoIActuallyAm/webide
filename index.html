@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebIDE 授权码计算器</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f7f9; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #333; margin-top: 0; font-size: 1.5rem; text-align: center; }
+        .input-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #666; font-size: 0.9rem; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: #007aff; }
+        button { width: 100%; padding: 12px; background-color: #007aff; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
+        button:hover { background-color: #0056b3; }
+        #result-container { margin-top: 1.5rem; padding: 1rem; background: #eef6ff; border-radius: 6px; display: none; text-align: center; }
+        .result-label { font-size: 0.8rem; color: #555; margin-bottom: 4px; }
+        #result-value { font-size: 1.8rem; font-weight: bold; color: #007aff; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>webide 授权码计算器</h2>
+    
+    <div class="input-group">
+        <label for="jValue">输入数值 (j):</label>
+        <input type="number" id="jValue" placeholder="例如: 7579604727" />
+    </div>
+
+    <button onclick="calculate()">生成授权码</button>
+
+    <div id="result-container">
+        <div class="result-label">计算出的授权码 (string):</div>
+        <div id="result-value"></div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const jInput = document.getElementById('jValue').value;
+        if (!jInput) {
+            alert("请输入数值 j");
+            return;
+        }
+
+        // 使用 BigInt 处理可能的大数字
+        const j = BigInt(jInput);
+        const mod7 = BigInt(10000000);
+        const mod6 = BigInt(1000000);
+
+        // 核心逻辑: ((j % 10000000) + (j / 10000000)) % 1000000
+        const part1 = j % mod7;
+        const part2 = j / mod7;
+        const result = (part1 + part2) % mod6;
+
+        // 显示结果
+        document.getElementById('result-value').innerText = result.toString();
+        document.getElementById('result-container').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
